@@ -1,14 +1,14 @@
 import React from 'react';
 
-function Results({data}) {
-  return (
+function Results(props){
+  return(
     <>
       <section>
-        <pre>{data ? JSON.stringify(data, undefined, 2) : null}</pre>
-      </section>
+        <pre>{props.data ? JSON.stringify(props.data, undefined, 2) : null}</pre>
+      </section> 
     </>
   )
 }
-
 export default Results;
+
 
