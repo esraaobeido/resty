@@ -10,23 +10,25 @@ import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
 import { useState } from 'react';
+import axios from 'axios';
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const [requestParams, setRequestParams] = useState({});
+  const [dataArray, setDataArray] = useState([]);
 
-  const callApi = (reqParams) => {
-    // Mock output
-    const newData = {
-      count: 2,
-      results: [
-        { name: 'fake thing 1', url: 'http://fakethings.com/1' },
-        { name: 'fake thing 2', url: 'http://fakethings.com/2' },
-      ],
-    };
-    setData(newData);
+  const callApi = async(reqParams) => {
     setRequestParams(reqParams);
-    console.log(data)
+
+    const newDataArray = [...dataArray, reqParams];
+    setDataArray(newDataArray);
+    const response = await axios.get(reqParams.url);
+    const newData = {
+      count: newDataArray.length,
+      results: response.data 
+    };
+
+    setData(newData);
   }
 
   return (
@@ -35,7 +37,7 @@ function App() {
       <div data-testid="req-method">Request Method: {requestParams.method}</div>
       <div data-testid="url">URL: {requestParams.url}</div>
       <Form handleApiCall={callApi} />
-      <Results data={requestParams.data} />
+      <Results data={data} />
       <Footer />
     </React.Fragment>
   );

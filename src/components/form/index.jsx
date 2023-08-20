@@ -4,18 +4,27 @@ import { useState } from 'react';
 function Form(props){
   const[input, setInput]=useState("")
   const[method, setMethod]= useState("get")
-  const [textarea, setTextarea]=useState(false)
-  const[textareaData, setTextareaData]= useState({})
-
+  const[textarea, setTextarea]=useState(false)
+  const[data, setData]= useState({})
 
   let handleData=(e)=>{
-    setTextareaData(e.target.value)
-    console.log("data",textareaData)
+    e.preventDefault()
+    let obj= {
+      name:e.target.value,
+      preview: e.target.value
+    }
+    setData(obj)
   }
+
+  let handleurlData=(e)=>{
+    e.preventDefault()
+    data.preview= e.target.value
+  }
+
   let handleChange=(e)=>{
-    setInput(e.target.value)
-   
+    setInput(e.target.value)   
   }
+
   let handleMethodChange=(e)=>{
     e.preventDefault()
     setMethod(e.target.id)
@@ -25,21 +34,23 @@ function Form(props){
       setTextarea(false)
     }
   }
+
     let handleSubmit = e => {
     e.preventDefault();
     const formData = {
       method:method,
       url: input,
-      data:textareaData
+      data:data
     };
     props.handleApiCall(formData);
   }
+
   return(
     <>
         <form >
           <label >
             <span>URL: </span>
-            <input onChange={handleChange} name='url' type='text' />
+            <input onChange={handleChange} name='url' type='text' placeholder='enter your api here!' />
             <button type="submit" onClick={handleSubmit}>GO!</button>
           </label>
           <label className="methods">
@@ -48,12 +59,21 @@ function Form(props){
             <button onClick={handleMethodChange} id="put">PUT</button>
             <button onClick={handleMethodChange} id="delete">DELETE</button>
           </label>
-        </form>
         {textarea && 
-        <textarea onChange={handleData} id="textarea" cols="5" rows="5"></textarea>
+        <form > 
+          <label >
+            <span>Name </span>
+            <input onChange={handleData} id='namee' type='text' />
+          </label>
+          <label >
+            <span>Preview </span>
+            <input onChange={handleurlData} id='urll' type='text' />
+          </label>
+          <button type="submit" onClick={handleSubmit}>submit</button>
+        </form>
       }
+        </form>
     </>
   )
 }
-
 export default Form
